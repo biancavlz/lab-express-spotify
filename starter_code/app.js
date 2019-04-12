@@ -13,8 +13,8 @@ app.use(express.static(__dirname + '/public'))
 // setting the spotify-api goes here:
 // Spotify credentials
 
-const clientId = '48c646a1036747d2aaf96081af58bff2',
-    clientSecret = '36df6d8a378c46faa21458cb377d2887'
+const clientId = '792ed61137d24fe584aa8e310238c95a',
+    clientSecret = 'a43132432d3940e191f5ef2f7bed3fe4'
 
 const spotifyApi = new SpotifyWebApi({
     clientId: clientId,
@@ -25,6 +25,7 @@ const spotifyApi = new SpotifyWebApi({
 spotifyApi
     .clientCredentialsGrant()
     .then(data => {
+        // console.log(data)
         spotifyApi.setAccessToken(data.body['access_token'])
     })
     .catch(error => {
@@ -34,6 +35,22 @@ spotifyApi
 // the routes go here:
 app.get('/', (req, res) => {
     res.render('index')
+})
+
+app.get('/artists', (req, res) => {
+    const query = req.query.name //get the query from the form name="name"
+    spotifyApi
+        .searchArtists(query)
+        .then(data => {
+            // console.log(data)
+            //console.log(data.body.artists.items[0].images[0])
+            const artists = data.body.artists.items
+
+            res.render('artists', { artists })
+        })
+        .catch(err => {
+            console.log('The error while searching artists occurred: ', err)
+        })
 })
 
 app.listen(3000, () => console.log('My Spotify project running on port 3000 🎧 🥁 🎸 🔊'))
