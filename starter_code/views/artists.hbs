@@ -1,6 +1,14 @@
-{{#each artists}}
 {{ this.name}}
-{{#each this.images}}
-{{ this.url}}
-{{/each}}
-{{/each}}
+
+
+<div class="artist">
+  <ul>
+    {{#each artists}}
+    <li>
+      <h3>{{ this.name}}</h3>
+      <img src={{ this.images.[0].url}} alt={{this.name}}>
+
+    </li>
+    {{/each}}
+  </ul>
+</div>
