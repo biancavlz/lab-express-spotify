@@ -37,6 +37,22 @@ app.get('/', (req, res) => {
     res.render('index')
 })
 
+app.get('/albums/:artistId', (req, res, next) => {
+    const { artistId } = req.params
+
+    spotifyApi.getArtistAlbums(artistId, { limit: 10, offset: 20 }).then(
+        function(data) {
+            console.log('Album information', data.body)
+            const albums = data.body.items
+
+            res.render('albums', { albums })
+        },
+        function(err) {
+            console.error(err)
+        }
+    )
+})
+
 app.get('/artists', (req, res) => {
     const query = req.query.name //get the query from the form name="name"
     spotifyApi
